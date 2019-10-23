@@ -8,13 +8,16 @@
             type="button"
             class="btn link"
             @click="$emit('update:show', false)"
-          >Close</button>
+          >
+            Close
+          </button>
           <a
             :href="img.src.original"
             target="__blank"
             class="btn previous"
             download
-          >Download</a>
+            >Download</a
+          >
         </div>
       </div>
     </transition>
@@ -22,10 +25,10 @@
 </template>
 
 <script>
-import LazyImage from './LazyImage.vue'
+import LazyImage from "./LazyImage.vue";
 
 export default {
-  name: 'AppModal',
+  name: "AppModal",
   components: { LazyImage },
   props: {
     show: {
@@ -41,7 +44,7 @@ export default {
       required: true
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

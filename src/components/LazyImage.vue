@@ -4,17 +4,19 @@
     <p class="gallery__attribution text-light">
       By
       <a
-        class="text-lighter"
+        class="text-lighter loading"
         :href="img.photographer_url"
         target="__blank"
-      >{{ img.photographer }}</a>
+      >
+        {{ img.photographer }}
+      </a>
     </p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'LazyImage',
+  name: "LazyImage",
   props: {
     img: {
       type: Object,
@@ -28,39 +30,39 @@ export default {
   data() {
     return {
       showing: false
-    }
+    };
   },
   computed: {
     src() {
-      return this.preview ? this.img.src.large2x : this.img.src.large
+      return this.preview ? this.img.src.large2x : this.img.src.large;
+    }
+  },
+  mounted() {
+    if ("IntersectionObserver" in window) {
+      let Observer = new IntersectionObserver(
+        entries => {
+          let image = entries[0];
+          if (image.isIntersecting) {
+            let img = new Image();
+            img.onload = () => {
+              this.$refs.img.src = this.img.src.large;
+              this.$refs.img.setAttribute(
+                "alt",
+                `photograph by ${this.img.photographer}`
+              );
+            };
+            this.showing = true;
+            img.src = this.img.src.large;
+          }
+        },
+        { rootMargin: "-10px", threshold: 0.5 }
+      );
+      Observer.observe(this.$el);
+    } else {
+      this.showing = true;
     }
   }
-  // mounted() {
-  //   if ('IntersectionObserver' in window) {
-  //     let Observer = new IntersectionObserver(
-  //       entries => {
-  //         let image = entries[0]
-  //         if (image.isIntersecting) {
-  //           let img = new Image()
-  //           img.onload = () => {
-  //             this.$refs.img.src = this.img.src.large
-  //             this.$refs.img.setAttribute(
-  //               'alt',
-  //               `photograph by ${this.img.photographer}`
-  //             )
-  //           }
-  //           this.showing = true
-  //           img.src = this.img.src.large
-  //         }
-  //       },
-  //       { rootMargin: '-10px', threshold: 0.5 }
-  //     )
-  //     Observer.observe(this.$refs.img)
-  //   } else {
-  //     this.showing = true
-  //   }
-  // }
-}
+};
 </script>
 <style lang="scss" scoped>
 .gallery__item {
@@ -89,36 +91,6 @@ export default {
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
-  }
-}
-.loading {
-  background: lighten(black, 95);
-  border: 0;
-  &:empty:after {
-    display: block;
-    content: ' ';
-    background: linear-gradient(
-      to right,
-      rgba(black, 0) 0%,
-      #fdfdfd 41%,
-      #f8f6f5 70%,
-      rgba(black, 0) 100%
-    );
-    width: 100%;
-    height: 100%;
-    animation: ltr;
-    animation-duration: var(--speed, 2.3s);
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
-}
-
-@keyframes ltr {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
   }
 }
 </style>

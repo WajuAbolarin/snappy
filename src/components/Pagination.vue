@@ -5,7 +5,9 @@
       type="button"
       class="btn previous"
       @click="$emit('previous')"
-    >&larr; previous</button>
+    >
+      &larr; previous
+    </button>
     <div class="stats">
       <small>{{ page || "-" }} / {{ pages || "-" }}</small>
     </div>
@@ -14,13 +16,15 @@
       class="btn next"
       @click="$emit('next')"
       v-if="hasNext"
-    >next &rarr;</button>
+    >
+      next &rarr;
+    </button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Pagination',
+  name: "Pagination",
   props: {
     stats: {
       type: Object,
@@ -39,7 +43,7 @@ export default {
       default: false
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .pagination {

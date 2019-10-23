@@ -1,5 +1,5 @@
 const emptyPhotos = n =>
-  Array.from({ length: n }, () => ({ src: "", photographer: "" }));
+  Array.from({ length: n }, () => ({ src: {}, photographer: "" }));
 const makeRequest = url =>
   fetch(url, {
     headers: {

@@ -15,25 +15,25 @@
 </template>
 
 <script>
-import LazyImage from './LazyImage.vue'
-import AppModal from './AppModal.vue'
+import LazyImage from "./LazyImage.vue";
+import AppModal from "./AppModal.vue";
 
 export default {
-  name: 'ImageGrid',
+  name: "ImageGrid",
   data() {
     return {
       showModal: false,
       chosenImage: {}
-    }
+    };
   },
   props: {
     popular: {
       type: Array,
-      default: () => []
+      required: true
     },
     title: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   components: {
@@ -42,15 +42,15 @@ export default {
   },
   methods: {
     showImage(img) {
-      this.chosenImage = img
-      this.showModal = true
+      this.chosenImage = img;
+      this.showModal = true;
     },
     updateShow(show) {
-      console.log('hi')
-      this.showModal = show
+      console.log("hi");
+      this.showModal = show;
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .popular {

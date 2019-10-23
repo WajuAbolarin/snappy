@@ -9,7 +9,16 @@
         :stats="stats"
         :hasNext="hasNext"
       />
-      <ResultsGrid :title="`showing results for ${term}`" :popular="photos" />
+      <transition name="slideRight" appear mode="out-in">
+        <div key="empty" v-if="photos.length === 0">
+          <h4 class="text-centerctext-light">
+            Oops! we couldn't find any photos for the term
+            <small>{{ term }}</small>
+          </h4>
+          <img class="empty-img" src="@/assets/empty.svg" alt />
+        </div>
+        <ResultsGrid key="results" v-else :popular="photos" />
+      </transition>
       <Pagination
         @next="fetchPage(Number(page) + 1)"
         @previous="fetchPage(Number(page) - 1)"
@@ -25,13 +34,15 @@
 <script>
 import ResultsGrid from '@/components/ImageGrid'
 import Pagination from '@/components/Pagination'
+import { emptyPhotos } from '@/utils'
 
 export default {
   name: 'Results',
   components: { ResultsGrid, Pagination },
   data: () => ({
     term: '',
-    page: ''
+    page: '',
+    ACTIVITY: null
   }),
   beforeRouteEnter(to, from, next) {
     let {
@@ -68,10 +79,17 @@ export default {
     }
   },
   methods: {
-    runSearch({ term, page }) {
+    async runSearch({ term, page }) {
+      this.ACTIVITY = 'FETCHING'
       this.page = page
       this.term = term
-      this.$store.dispatch('search', { term, page })
+      try {
+        await this.$store.dispatch('search', { term, page })
+      } catch (e) {
+        console.warn(e)
+      } finally {
+        this.ACTIVITY = null
+      }
     },
     fetchPage(page) {
       history.pushState(
@@ -80,7 +98,8 @@ export default {
         `/results?term=${this.term}&page=${page}`
       )
       this.runSearch({ term: this.term, page })
-    }
+    },
+    emptyPhotos
   }
 }
 </script>
@@ -92,5 +111,19 @@ export default {
   grid-template-columns: 1fr;
   grid-template-rows: 6em 1fr 5em;
   margin: 0 auto;
+}
+.empty-img {
+  width: 14em;
+  display: block;
+  margin: 0 auto;
+}
+.slideRight-enter-active,
+.slideRight-leave-active {
+  transition: all 0.3s ease-in-out;
+  opacity: 0.5;
+}
+.slideRight-enter,
+.slideRight-leave-to {
+  opacity: 0;
 }
 </style>
