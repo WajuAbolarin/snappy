@@ -1,18 +1,27 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <main>
+    <AppPopular id="popular" title="Popular Photos" :popular="popular" />
+  </main>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import popular from '@/fixtures/popular'
+import AppPopular from '@/components/ImageGrid'
 
 export default {
-  name: "home",
-  components: {
-    HelloWorld
+  name: 'home',
+  components: { AppPopular },
+  data: () => ({
+    popular
+  }),
+  mounted() {
+    // fetch(`https://api.pexels.com/v1/search?query=home&per_page=15&page=1`, {
+    //   headers: {
+    //     Authorization: `563492ad6f91700001000001c73261beb943431d9126241df217f1ef`
+    //   }
+    // })
+    //   .then(res => res.json())
+    //   .then(console.log)
   }
-};
+}
 </script>
