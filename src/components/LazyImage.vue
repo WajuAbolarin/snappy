@@ -1,13 +1,13 @@
 <template>
   <div class="gallery__item">
     <img :src="img.src.large" loading="lazy" ref="img" class="gallery__img" />
-    <p v-if="showing" class="gallery__attribution text-light">
+    <p class="gallery__attribution text-light">
       By
-      <a class="text-lighter" :href="img.photographer_url" target="__blank">
-        {{
-        img.photographer
-        }}
-      </a>
+      <a
+        class="text-lighter"
+        :href="img.photographer_url"
+        target="__blank"
+      >{{ img.photographer }}</a>
     </p>
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
   props: {
     img: {
       type: Object,
-      default: () => ({ src: '' })
+      default: () => ({})
     }
   },
   data() {

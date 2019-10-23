@@ -1,62 +1,96 @@
 <template>
   <main>
-    <ResultsGrid title="Results for Home" :popular="popular" />
-    <div class="pagination">
-      <button class="icon">
-        &larr;
-        previous
-      </button>
-      <button class="icon">next &rarr;</button>
+    <div class="results">
+      <Pagination
+        @next="fetchPage(Number(page) + 1)"
+        @previous="fetchPage(Number(page) - 1)"
+        :pages="pages"
+        :page="page"
+        :stats="stats"
+        :hasNext="hasNext"
+      />
+      <ResultsGrid :title="`showing results for ${term}`" :popular="photos" />
+      <Pagination
+        @next="fetchPage(Number(page) + 1)"
+        @previous="fetchPage(Number(page) - 1)"
+        :pages="pages"
+        :page="page"
+        :stats="stats"
+        :hasNext="hasNext"
+      />
     </div>
   </main>
 </template>
 
 <script>
-import popular from '@/fixtures/popular'
 import ResultsGrid from '@/components/ImageGrid'
+import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'home',
-  components: { ResultsGrid },
+  name: 'Results',
+  components: { ResultsGrid, Pagination },
   data: () => ({
-    popular
+    term: '',
+    page: ''
   }),
-  beforeRouteEnter(_, from, next) {
-    if (!from.name) {
-      next('/')
-      return
+  beforeRouteEnter(to, from, next) {
+    let {
+      query: { term }
+    } = to
+    if (!term) {
+      return next('/')
     }
     next()
+  },
+  created() {
+    let {
+      query: { term, page }
+    } = this.$route
+    this.runSearch({ page, term })
+  },
+  computed: {
+    photos() {
+      let photos = this.$store.getters[`getPhotosForPage`]({
+        page: this.page,
+        term: this.term
+      })
+
+      return photos
+    },
+    stats() {
+      return this.$store.getters.stats
+    },
+    pages() {
+      return Math.ceil((this.stats.total_results || 1) / this.stats.per_page)
+    },
+    hasNext() {
+      return Boolean(this.stats.next_page)
+    }
+  },
+  methods: {
+    runSearch({ term, page }) {
+      this.page = page
+      this.term = term
+      this.$store.dispatch('search', { term, page })
+    },
+    fetchPage(page) {
+      history.pushState(
+        '',
+        `Search for + ${this.term}| ${page}`,
+        `/results?term=${this.term}&page=${page}`
+      )
+      this.runSearch({ term: this.term, page })
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  bottom: 1em;
-  width: 20em;
-  margin-right: 1em;
-  margin-left: auto;
-  .icon {
-    width: 10em;
-    height: 2.5em;
-    max-width: 100px;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-    border: 2px solid var(--lighter);
-    background: white;
-    backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
-    &:hover,
-    &:focus {
-      background: var(--black);
-      border-color: var(--black);
-      color: var(--primary);
-    }
-  }
-  .next {
-    transform: rotate3d(0, 180, 0, 180deg);
-  }
-  justify-content: space-between;
+.results {
+  max-width: 100em;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 6em 1fr 5em;
+  margin: 0 auto;
 }
 </style>

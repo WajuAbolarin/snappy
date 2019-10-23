@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "es5",
-    "checkJs": true,
     "paths": {
       "@": ["./src"]
     }

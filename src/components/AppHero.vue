@@ -1,8 +1,9 @@
 <template>
   <section class="hero">
-    <form @submit.prevent="$router.push('/results')" class="search-form">
+    <form @submit.prevent="$emit('search', term)" class="search-form">
       <div class="search">
         <input
+          v-model="term"
           placeholder="Search for a photo"
           autofocus
           type="text"
@@ -25,6 +26,7 @@
 export default {
   name: "AppHero",
   data: () => ({
+    term: "",
     words: [
       "home",
       "happy",
@@ -49,7 +51,7 @@ export default {
   height: 18em;
   width: 100%;
   background: linear-gradient(to bottom, rgba(black, 0.2), rgba(black, 0.7)),
-    url("../assets/banner.jpg") center center;
+    url("../assets/banner2.jpg") center center;
   background-size: cover;
   display: grid;
   place-items: center;

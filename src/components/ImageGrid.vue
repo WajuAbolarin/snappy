@@ -1,6 +1,6 @@
 <template>
   <section class="popular">
-    <h3 v-if="title" class="title text-center text-light">{{title}}</h3>
+    <h3 v-if="title" class="title text-center text-light">{{ title }}</h3>
     <div class="popular-gallery">
       <LazyImage
         v-for="img in popular"

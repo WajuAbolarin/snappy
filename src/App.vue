@@ -1,38 +1,46 @@
 <template>
   <div id="app">
     <AppHeader />
-    <transition-group tag="div" name="bounce">
-      <AppHero key="search" v-if="isHomePage" />
-    </transition-group>
+    <AppHero @search="search" key="search" />
     <router-view />
     <AppFooter />
   </div>
 </template>
 <script>
-import AppHeader from "@/components/AppHeader";
-import AppFooter from "@/components/AppFooter";
-import AppHero from "@/components/AppHero";
+import AppHeader from '@/components/AppHeader'
+import AppFooter from '@/components/AppFooter'
+import AppHero from '@/components/AppHero'
 
 export default {
-  name: "Snappy",
+  name: 'Snappy',
   components: { AppHeader, AppFooter, AppHero },
-  computed: {
-    isHomePage() {
-      return this.$route.path === "/";
+  data() {
+    return {
+      ACTIVITY: null
+    }
+  },
+  created() {
+    this.$store.dispatch('getPopularPhotos')
+  },
+  methods: {
+    async search(term) {
+      if (term && this.$route.path != '/results') {
+        this.$router.push({ path: '/results', query: { term, page: '1' } })
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
 $colors: (
-  "primary": orangered,
-  "black": lighten(black, 20),
-  "light": lighten(black, 30),
-  "lighter": lighten(black, 70),
-  "lightest": lighten(black, 80),
-  "white": darken(white, 10),
-  "secondary": #eee
+  'primary': orangered,
+  'black': lighten(black, 20),
+  'light': lighten(black, 30),
+  'lighter': lighten(black, 70),
+  'lightest': lighten(black, 80),
+  'white': darken(white, 10),
+  'secondary': #eee
 );
 
 .cursor {
@@ -69,9 +77,13 @@ html {
 }
 
 #app {
-  font-family: "Josefin Sans", sans-serif;
+  font-family: 'Josefin Sans', sans-serif;
   color: var(--black);
   position: relative;
+  min-height: 100vh;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-rows: 5em 18em 1fr 5em;
 }
 h1,
 h2,
@@ -79,7 +91,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .bounce-enter-active {
