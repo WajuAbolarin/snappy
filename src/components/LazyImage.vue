@@ -1,6 +1,6 @@
 <template>
   <div class="gallery__item">
-    <img :src="img.src.large" loading="lazy" ref="img" class="gallery__img" />
+    <img :src="src" loading="lazy" ref="img" class="gallery__img" />
     <p class="gallery__attribution text-light">
       By
       <a
@@ -19,11 +19,20 @@ export default {
     img: {
       type: Object,
       default: () => ({})
+    },
+    preview: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       showing: false
+    }
+  },
+  computed: {
+    src() {
+      return this.preview ? this.img.src.large2x : this.img.src.large
     }
   }
   // mounted() {

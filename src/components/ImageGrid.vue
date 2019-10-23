@@ -3,20 +3,29 @@
     <h3 v-if="title" class="title text-center text-light">{{ title }}</h3>
     <div class="popular-gallery">
       <LazyImage
+        class="gallery__item"
         v-for="img in popular"
         :img="img"
         :key="img.id"
-        class="gallery__item"
+        @click.native="showImage(img)"
       />
     </div>
+    <AppModal @update:show="updateShow" :show="showModal" :img="chosenImage" />
   </section>
 </template>
 
 <script>
 import LazyImage from './LazyImage.vue'
+import AppModal from './AppModal.vue'
 
 export default {
   name: 'ImageGrid',
+  data() {
+    return {
+      showModal: false,
+      chosenImage: {}
+    }
+  },
   props: {
     popular: {
       type: Array,
@@ -28,7 +37,18 @@ export default {
     }
   },
   components: {
-    LazyImage
+    LazyImage,
+    AppModal
+  },
+  methods: {
+    showImage(img) {
+      this.chosenImage = img
+      this.showModal = true
+    },
+    updateShow(show) {
+      console.log('hi')
+      this.showModal = show
+    }
   }
 }
 </script>

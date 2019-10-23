@@ -110,7 +110,25 @@ h6 {
   height: 1;
   transform: translate3d(0, -20px, 0);
 }
-
+.btn {
+  width: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5em;
+  max-width: 100px;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  border: 2px solid var(--lighter);
+  background: white;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  &:hover,
+  &:focus {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--primary);
+  }
+}
 @keyframes slideDown {
   0% {
     transform: translate3d(0, -2px, 0);
