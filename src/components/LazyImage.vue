@@ -7,9 +7,8 @@
         class="text-lighter loading"
         :href="img.photographer_url"
         target="__blank"
+        >{{ img.photographer }}</a
       >
-        {{ img.photographer }}
-      </a>
     </p>
   </div>
 </template>
@@ -55,7 +54,7 @@ export default {
             img.src = this.img.src.large;
           }
         },
-        { rootMargin: "-10px", threshold: 0.5 }
+        { rootMargin: "10px", threshold: 0.5 }
       );
       Observer.observe(this.$el);
     } else {
@@ -91,6 +90,13 @@ export default {
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
+
+    &:empty {
+      display: block;
+      width: 30em;
+      height: 88%;
+      background: rgba(black, 0.05);
+    }
   }
 }
 </style>

@@ -2,7 +2,23 @@
   <div class="modal" role="document" v-if="show">
     <transition name="slideUp" appear>
       <div class="modal__content" :key="show">
-        <LazyImage preview :img="img" :key="img.id" class="gallery__item" />
+        <div class="preview">
+          <img
+            :src="img.src.large2x"
+            loading="lazy"
+            ref="img"
+            class="gallery__img"
+          />
+          <p class="gallery__attribution text-light">
+            By
+            <a
+              class="text-lighter loading"
+              :href="img.photographer_url"
+              target="__blank"
+              >{{ img.photographer }}</a
+            >
+          </p>
+        </div>
         <div class="modal__actions">
           <button
             type="button"
@@ -25,11 +41,8 @@
 </template>
 
 <script>
-import LazyImage from "./LazyImage.vue";
-
 export default {
   name: "AppModal",
-  components: { LazyImage },
   props: {
     show: {
       type: Boolean,
@@ -56,7 +69,6 @@ export default {
   width: 100vw;
   height: 100vh;
   z-index: 1000;
-  overflow: hidden;
   display: flex;
   align-items: flex-end;
   @media (min-width: 960px) {
@@ -64,6 +76,7 @@ export default {
     justify-content: center;
   }
   &__content {
+    overflow: hidden;
     background: var(--secondary);
     max-height: 27em;
     height: 27em;
@@ -79,6 +92,10 @@ export default {
       height: 40em;
     }
   }
+  .preview {
+    overflow: hidden;
+    height: 90%;
+  }
   &__actions {
     display: flex;
     justify-content: flex-end;
@@ -92,6 +109,16 @@ export default {
     background: none;
     text-decoration: underline;
     padding-top: 0.5em;
+  }
+  .gallery__img {
+    object-fit: cover;
+    object-position: center center;
+    &:empty {
+      display: block;
+      width: 100%;
+      height: 88%;
+      background: rgba(black, 0.05);
+    }
   }
 }
 

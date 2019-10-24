@@ -47,7 +47,7 @@ export default new Vuex.Store({
     },
     async getPopularPhotos({ commit }) {
       let results = await makeRequest(
-        `https://api.pexels.com/v1/curated?per_page=10&page=1`
+        `https://api.pexels.com/v1/curated?per_page=15&page=1`
       );
       commit("SET_POPULAR", results.photos);
     }

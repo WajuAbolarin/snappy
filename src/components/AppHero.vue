@@ -1,24 +1,30 @@
 <template>
   <section class="hero">
-    <form @submit.prevent="$emit('search', term)" class="search-form">
-      <div class="search">
-        <input
-          v-model="term"
-          placeholder="Search for a photo"
-          autofocus
-          type="text"
-          class="search-form__input"
-        />
-        <button type="submit" class="search-form__submit">
-          <img src="@/assets/search.svg" alt />
-          <small class="text-light">Search</small>
-        </button>
-      </div>
-      <small class="helper text-lighter">
-        eg.
-        <span class="text-white">{{ suggestions }}</span>
-      </small>
-    </form>
+    <transition name="slideRight" appear>
+      <form
+        @submit.prevent="$emit('search', term)"
+        class="search-form"
+        v-show="page === '/'"
+      >
+        <div class="search">
+          <input
+            v-model="term"
+            placeholder="Search for a photo"
+            autofocus
+            type="text"
+            class="search-form__input"
+          />
+          <button type="submit" class="search-form__submit">
+            <img src="@/assets/search.svg" alt />
+            <small class="text-light">Search</small>
+          </button>
+        </div>
+        <small class="helper text-lighter">
+          eg.
+          <span class="text-white">{{ suggestions }}</span>
+        </small>
+      </form>
+    </transition>
   </section>
 </template>
 
@@ -42,6 +48,9 @@ export default {
   computed: {
     suggestions() {
       return this.words.slice(0, 5).join(", ");
+    },
+    page() {
+      return this.$route.path;
     }
   }
 };
@@ -107,5 +116,14 @@ export default {
       }
     }
   }
+}
+.slideRight-enter-active,
+.slideRight-leave-active {
+  transition: all 0.3s ease-in-out;
+  opacity: 0.5;
+}
+.slideRight-enter,
+.slideRight-leave-to {
+  opacity: 0;
 }
 </style>

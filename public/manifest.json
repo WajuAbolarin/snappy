@@ -37,5 +37,11 @@
       "type": "imagepng",
       "density": "4.0"
     }
-  ]
+  ],
+  "background_color": "#ff5108",
+  "theme_color": "#ff5108",
+  "short_name": "Snappy",
+  "start_url": ".",
+  "display": "standalone",
+  "description": "Google for Images... just kidding"
 }
