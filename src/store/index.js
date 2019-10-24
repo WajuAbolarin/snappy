@@ -36,20 +36,28 @@ export default new Vuex.Store({
       if (cache) {
         return Promise.resolve(true);
       }
-      let results = await makeRequest(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(
-          term
-        )}&per_page=20&page=${page}`
-      );
-      let { photos, ...stats } = results;
-      commit("SET_RESULTS", { results: photos, page, term });
-      commit("SET_STATS", stats);
+      try {
+        let results = await makeRequest(
+          `https://api.pexels.com/v1/search?query=${encodeURIComponent(
+            term
+          )}&per_page=20&page=${page}`
+        );
+        let { photos, ...stats } = results;
+        commit("SET_RESULTS", { results: photos, page, term });
+        commit("SET_STATS", stats);
+      } catch (e) {
+        throw e;
+      }
     },
     async getPopularPhotos({ commit }) {
-      let results = await makeRequest(
-        `https://api.pexels.com/v1/curated?per_page=15&page=1`
-      );
-      commit("SET_POPULAR", results.photos);
+      try {
+        let results = await makeRequest(
+          `https://api.pexels.com/v1/curated?per_page=15&page=1`
+        );
+        commit("SET_POPULAR", results.photos);
+      } catch (e) {
+        throw e;
+      }
     }
   },
   getters: {

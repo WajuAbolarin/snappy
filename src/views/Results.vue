@@ -13,8 +13,12 @@
         <div v-if="ACTIVITY">
           <h2 class="text-center">. . .</h2>
         </div>
-        <div key="empty" v-else-if="!photos">
-          <h4 class="text-centerctext-light">
+        <div
+          class="empty"
+          key="empty"
+          v-else-if="!photos || photos && photos.length === 0"
+        >
+          <h4 class="text-center text-light">
             Oops! we couldn't find any photos for the term
             <small>{{ term }}</small>
           </h4>
@@ -35,76 +39,76 @@
 </template>
 
 <script>
-import ResultsGrid from "@/components/ImageGrid";
-import Pagination from "@/components/Pagination";
-import { emptyPhotos } from "@/utils";
+import ResultsGrid from '@/components/ImageGrid'
+import Pagination from '@/components/Pagination'
+import { emptyPhotos } from '@/utils'
 
 export default {
-  name: "Results",
+  name: 'Results',
   components: { ResultsGrid, Pagination },
   data: () => ({
-    term: "",
-    page: "",
+    term: '',
+    page: '',
     ACTIVITY: null
   }),
   beforeRouteEnter(to, from, next) {
     let {
       query: { term }
-    } = to;
+    } = to
     if (!term) {
-      return next("/");
+      return next('/')
     }
-    next();
+    next()
   },
   created() {
     let {
       query: { term, page }
-    } = this.$route;
-    this.runSearch({ page, term });
+    } = this.$route
+    this.runSearch({ page, term })
   },
   computed: {
     photos() {
       let photos = this.$store.getters[`getPhotosForPage`]({
         page: this.page,
         term: this.term
-      });
+      })
 
-      return photos;
+      return photos
     },
     stats() {
-      return this.$store.getters.stats;
+      return this.$store.getters.stats
     },
     pages() {
-      return Math.ceil((this.stats.total_results || 1) / this.stats.per_page);
+      return Math.ceil((this.stats.total_results || 1) / this.stats.per_page)
     },
     hasNext() {
-      return Boolean(this.stats.next_page);
+      return Boolean(this.stats.next_page)
     }
   },
   methods: {
     async runSearch({ term, page }) {
-      this.ACTIVITY = "FETCHING";
-      this.page = page;
-      this.term = term;
+      this.ACTIVITY = 'FETCHING'
+      this.page = page
+      this.term = term
       try {
-        await this.$store.dispatch("search", { term, page });
+        await this.$store.dispatch('search', { term, page })
       } catch (e) {
-        console.warn(e);
+        console.warn(e)
       } finally {
-        this.ACTIVITY = null;
+        this.ACTIVITY = null
       }
     },
     fetchPage(page) {
       history.pushState(
-        "",
+        '',
         `Search for + ${this.term}| ${page}`,
         `/results?term=${this.term}&page=${page}`
-      );
-      this.runSearch({ term: this.term, page });
+      )
+      this.runSearch({ term: this.term, page })
     },
     emptyPhotos
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .results {
@@ -114,6 +118,9 @@ export default {
   grid-template-columns: 1fr;
   grid-template-rows: 6em 1fr 5em;
   margin: 0 auto;
+}
+.empty {
+  margin-top: 5em;
 }
 .empty-img {
   width: 14em;
