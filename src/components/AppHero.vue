@@ -37,7 +37,7 @@
       to="/"
       key="return"
       tag="h4"
-      class="text-lightest"
+      class="text-lightest cursor"
     >&larr; Back to Popular</router-link>
   </transition-group>
 </template>

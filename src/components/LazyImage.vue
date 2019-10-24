@@ -56,7 +56,9 @@ export default {
         { rootMargin: '10px', threshold: 0.5 }
       )
       Observer.observe(this.$el)
-      this.$once('hook:beforeDestroy', Observer.disconnect)
+      this.$once('hook:beforeDestroy', () => {
+        Observer.disconnect()
+      })
     } else {
       this.showing = true
     }
