@@ -89,13 +89,14 @@ export default {
     grid-template-rows: 1fr 7em;
     padding: 1em;
     @media (min-width: 960px) {
-      width: 70%;
+      width: 90%;
       max-width: 50em;
-      height: 40em;
+      height: 80vh;
     }
   }
   .preview {
     overflow: hidden;
+    min-height: 80%;
   }
   &__actions {
     display: flex;
@@ -116,6 +117,7 @@ export default {
     object-fit: scale-down;
     object-position: center center;
     max-width: 100%;
+    height: 90%;
     &:empty {
       display: block;
       width: 100%;

@@ -68,7 +68,7 @@ export default {
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr;
-  grid-auto-rows: 90% 1fr;
+  grid-template-rows: 1fr 20%;
   border-bottom: 1px solid var(--lightest);
   &:focus,
   &:focus-within {
@@ -84,7 +84,7 @@ export default {
   }
   .gallery__img {
     width: 100%;
-    height: 88%;
+    // height: 88%;
     object-fit: cover;
     object-position: center center;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
