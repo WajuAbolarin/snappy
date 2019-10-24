@@ -1,66 +1,83 @@
 <template>
-  <section class="hero">
-    <transition name="slideRight" appear>
-      <form
-        @submit.prevent="$emit('search', term)"
-        class="search-form"
-        v-show="page === '/'"
-      >
-        <div class="search">
-          <input
-            v-model="term"
-            placeholder="Search for a photo"
-            autofocus
-            type="text"
-            class="search-form__input"
-          />
-          <button type="submit" class="search-form__submit">
-            <img src="@/assets/search.svg" alt />
-            <small class="text-light">Search</small>
-          </button>
-        </div>
-        <small class="helper text-lighter">
-          eg.
-          <span class="text-white">{{ suggestions }}</span>
-        </small>
-      </form>
-    </transition>
-  </section>
+  <transition-group
+    tag="section"
+    class="hero"
+    delay="100"
+    name="slideUp"
+    appear
+    mode="out-in"
+  >
+    <form
+      key="form"
+      @submit.prevent="$emit('search', term)"
+      class="search-form"
+      v-if="page === '/'"
+    >
+      <div class="search">
+        <input
+          v-model="term"
+          placeholder="Search for a photo"
+          autofocus
+          type="text"
+          class="search-form__input"
+        />
+        <button type="submit" class="search-form__submit">
+          <img src="@/assets/search.svg" alt />
+          <small class="text-light">Search</small>
+        </button>
+      </div>
+      <small class="helper text-lighter">
+        eg.
+        <span class="text-white">{{ suggestions }}</span>
+      </small>
+    </form>
+
+    <router-link
+      v-else
+      to="/"
+      key="return"
+      tag="h4"
+      class="text-lightest"
+    >&larr; Back to Popular</router-link>
+  </transition-group>
 </template>
 
 <script>
 export default {
-  name: "AppHero",
+  name: 'AppHero',
   data: () => ({
-    term: "",
+    term: '',
     words: [
-      "home",
-      "happy",
-      "friend",
-      "work",
-      "technology",
-      "cregital",
-      "family",
-      "people",
-      "creative"
+      'home',
+      'happy',
+      'friend',
+      'work',
+      'technology',
+      'cregital',
+      'family',
+      'people',
+      'creative'
     ]
   }),
   computed: {
     suggestions() {
-      return this.words.slice(0, 5).join(", ");
+      return this.words.slice(0, 5).join(', ')
     },
     page() {
-      return this.$route.path;
+      return this.$route.path
+    },
+    popular() {
+      return this.$store.getters.popularPhotos[0].src.medium
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .hero {
   height: 18em;
   width: 100%;
   background: linear-gradient(to bottom, rgba(black, 0.2), rgba(black, 0.7)),
-    url("../assets/banner2.jpg") center center;
+    url('../assets/banner2.jpg') center center;
   background-size: cover;
   display: grid;
   place-items: center;
@@ -124,6 +141,18 @@ export default {
 }
 .slideRight-enter,
 .slideRight-leave-to {
+  opacity: 0;
+}
+
+.slideUp-enter-active,
+.slideUp-leave-active {
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  opacity: 0;
+}
+.slideUp-enter,
+.slideUp-leave-to {
+  transform: translate3d(0, 2px, 0);
   opacity: 0;
 }
 </style>

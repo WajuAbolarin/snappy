@@ -1,5 +1,11 @@
 <template>
   <div class="modal" role="document" v-if="show">
+    <img
+      @click="$emit('update:show', false)"
+      class="close"
+      src="@/assets/close.svg"
+      alt
+    />
     <transition name="slideUp" appear>
       <div class="modal__content" :key="show">
         <div class="preview">
@@ -15,8 +21,7 @@
               class="text-lighter loading"
               :href="img.photographer_url"
               target="__blank"
-              >{{ img.photographer }}</a
-            >
+            >{{ img.photographer }}</a>
           </p>
         </div>
         <div class="modal__actions">
@@ -24,16 +29,13 @@
             type="button"
             class="btn link"
             @click="$emit('update:show', false)"
-          >
-            Close
-          </button>
+          >Close</button>
           <a
             :href="img.src.original"
             target="__blank"
             class="btn previous"
             download
-            >Download</a
-          >
+          >Download</a>
         </div>
       </div>
     </transition>
@@ -42,7 +44,7 @@
 
 <script>
 export default {
-  name: "AppModal",
+  name: 'AppModal',
   props: {
     show: {
       type: Boolean,
@@ -57,7 +59,7 @@ export default {
       required: true
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -65,6 +67,8 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   background: rgba(black, 0.9);
   width: 100vw;
   height: 100vh;
@@ -76,15 +80,13 @@ export default {
     justify-content: center;
   }
   &__content {
-    overflow: hidden;
     background: var(--secondary);
-    max-height: 27em;
-    height: 27em;
+    height: 70vh;
     width: 100%;
     border-top: 10px solid var(--primary);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 5em;
+    grid-template-rows: 1fr 7em;
     padding: 1em;
     @media (min-width: 960px) {
       width: 70%;
@@ -94,7 +96,6 @@ export default {
   }
   .preview {
     overflow: hidden;
-    height: 90%;
   }
   &__actions {
     display: flex;
@@ -112,13 +113,20 @@ export default {
   }
   .gallery__img {
     object-fit: cover;
+    object-fit: scale-down;
     object-position: center center;
+    max-width: 100%;
     &:empty {
       display: block;
       width: 100%;
-      height: 88%;
       background: rgba(black, 0.05);
     }
+  }
+  .close {
+    position: absolute;
+    top: 1em;
+    width: 30px;
+    right: 1em;
   }
 }
 

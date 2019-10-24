@@ -7,15 +7,14 @@
         class="text-lighter loading"
         :href="img.photographer_url"
         target="__blank"
-        >{{ img.photographer }}</a
-      >
+      >{{ img.photographer }}</a>
     </p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "LazyImage",
+  name: 'LazyImage',
   props: {
     img: {
       type: Object,
@@ -29,39 +28,40 @@ export default {
   data() {
     return {
       showing: false
-    };
+    }
   },
   computed: {
     src() {
-      return this.preview ? this.img.src.large2x : this.img.src.large;
+      return this.preview ? this.img.src.original : this.img.src.large
     }
   },
   mounted() {
-    if ("IntersectionObserver" in window) {
+    if ('IntersectionObserver' in window) {
       let Observer = new IntersectionObserver(
         entries => {
-          let image = entries[0];
+          let image = entries[0]
           if (image.isIntersecting) {
-            let img = new Image();
+            let img = new Image()
             img.onload = () => {
-              this.$refs.img.src = this.img.src.large;
+              this.$refs.img.src = this.img.src.large
               this.$refs.img.setAttribute(
-                "alt",
+                'alt',
                 `photograph by ${this.img.photographer}`
-              );
-            };
-            this.showing = true;
-            img.src = this.img.src.large;
+              )
+            }
+            this.showing = true
+            img.src = this.img.src.large
           }
         },
-        { rootMargin: "10px", threshold: 0.5 }
-      );
-      Observer.observe(this.$el);
+        { rootMargin: '10px', threshold: 0.5 }
+      )
+      Observer.observe(this.$el)
+      this.$once('hook:beforeDestroy', Observer.disconnect)
     } else {
-      this.showing = true;
+      this.showing = true
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .gallery__item {
